@@ -24,9 +24,7 @@ jobs:
           coverage: none
 
       - name: Validate composer.json and composer.lock
-        run: |
-          cd project
-          composer validate --strict
+        run: composer validate --strict
 
       - name: Cache Composer packages
         uses: actions/cache@v3
@@ -38,7 +36,3 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
-
-      # Nếu bạn có script test trong composer.json (ví dụ "test": "vendor/bin/phpunit")
-      # - name: Run test suite
-      #   run: composer run-script test
