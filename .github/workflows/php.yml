@@ -24,7 +24,9 @@ jobs:
           coverage: none
 
       - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+         run: |
+              cd project
+              composer validate --strict
         # Trên Windows runner, composer đã có sẵn khi dùng setup-php.
         # Nếu bạn gặp lỗi lệnh bash không tồn tại, bạn có thể bỏ shell: bash hoặc dùng PowerShell:
         # shell: pwsh
