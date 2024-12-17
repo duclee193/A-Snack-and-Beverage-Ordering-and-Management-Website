@@ -20,16 +20,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0' # Bạn có thể đổi sang phiên bản PHP khác
+          php-version: '8.0'
           coverage: none
 
       - name: Validate composer.json and composer.lock
-         run: |
-              cd project
-              composer validate --strict
-        # Trên Windows runner, composer đã có sẵn khi dùng setup-php.
-        # Nếu bạn gặp lỗi lệnh bash không tồn tại, bạn có thể bỏ shell: bash hoặc dùng PowerShell:
-        # shell: pwsh
+        run: |
+          cd project
+          composer validate --strict
 
       - name: Cache Composer packages
         uses: actions/cache@v3
@@ -41,9 +38,6 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
-        # shell: pwsh
-        # Nếu cần, bạn có thể chỉ định shell PowerShell hoặc cmd:
-        # shell: cmd
 
       # Nếu bạn có script test trong composer.json (ví dụ "test": "vendor/bin/phpunit")
       # - name: Run test suite
