@@ -1,4 +1,4 @@
-name: PHP Composer
+name: PHP Composer on Windows
 
 on:
   push:
@@ -11,29 +11,38 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      # Thiết lập PHP trên Windows
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0' # Bạn có thể đổi sang phiên bản PHP khác
+          coverage: none
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+        # Trên Windows runner, composer đã có sẵn khi dùng setup-php.
+        # Nếu bạn gặp lỗi lệnh bash không tồn tại, bạn có thể bỏ shell: bash hoặc dùng PowerShell:
+        # shell: pwsh
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+        # shell: pwsh
+        # Nếu cần, bạn có thể chỉ định shell PowerShell hoặc cmd:
+        # shell: cmd
 
-    # - name: Run test suite
-    #   run: composer run-script test
+      # Nếu bạn có script test trong composer.json (ví dụ "test": "vendor/bin/phpunit")
+      # - name: Run test suite
+      #   run: composer run-script test
